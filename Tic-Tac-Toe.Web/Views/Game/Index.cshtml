@@ -1,0 +1,97 @@
+﻿@model Tic_Tac_Toe.Domain.Entities.Game
+@{
+    ViewData["Title"] = "Tic-Tac-Toe";
+}
+
+<div class="container text-center">
+    <h1 class="my-4">Tic-Tac-Toe</h1>
+    <p class="lead">@(Model.IsSinglePlayer ? "Single Player Mode (vs AI)" : "Multiplayer Mode") - Player @Model.CurrentPlayer's turn</p>
+    <p class="text-muted">Click an empty cell to make your move. In single-player mode, the AI will respond.</p>
+
+    
+    <form asp-action="SetMode" method="post" class="mb-3">
+        <button type="submit" name="mode" value="single" class="btn btn-primary me-2">Single Player (vs AI)</button>
+        <button type="submit" name="mode" value="multi" class="btn btn-secondary">Multiplayer</button>
+    </form>
+    <div class="card mx-auto" style="width: 320px;">
+        <div class="card-body p-2">
+            <div class="game-board">
+                @for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        <div class="cell">
+                            <form asp-action="MakeMove" method="post">
+                                <input type="hidden" name="row" value="@i" />
+                                <input type="hidden" name="col" value="@j" />
+                                <button type="submit"
+                                        class="btn tile @(Model.GetBoard()[i, j] == 'X' ? "text-danger" : Model.GetBoard()[i, j] == 'O' ? "text-primary" : "")"
+                                        disabled="@(Model.GetBoard()[i, j] != ' ' || Model.Status != "InProgress")">
+                                    @Model.GetBoard()[i, j]
+                                </button>
+                            </form>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+   
+    @if (Model.Status != "InProgress")
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            @(Model.Status == "Draw" ? "It's a draw!" : $"Player {Model.Status[0]} Won!")
+        </div>
+    }
+
+    <form asp-action="Reset" method="post" class="mt-3">
+        <button type="submit" class="btn btn-danger">Reset Game</button>
+    </form>
+</div>
+
+<style>
+    .game-board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        gap: 10px;
+    }
+
+    .tile {
+        width: 100px;
+        height: 100px;
+        font-size: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        background-color: #fff;
+    }
+
+        .tile:hover:not(:disabled) {
+            background-color: #f0f0f0;
+        }
+
+        .tile:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+</style>
+
+<script>
+    function showAIThinking() {
+        document.getElementById('aiThinking').style.display = 'flex';
+    }
+    function hideAIThinking() {
+        document.getElementById('aiThinking').style.display = 'none';
+    }
+
+    document.querySelectorAll('form[action="/Game/MakeMove"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if ('@Model.IsSinglePlayer' === 'True') {
+                showAIThinking();
+                setTimeout(hideAIThinking, 1000); 
+            }
+        });
+    });
+</script>

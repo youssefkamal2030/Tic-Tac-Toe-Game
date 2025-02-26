@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Tic_Tac_Toe.Web</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tic-Tac-Toe.Application\Tic-Tac-Toe.Application.csproj" />
+    <ProjectReference Include="..\Tic-Tac-Toe.Domain\Tic-Tac-Toe.Domain.csproj" />
+    <ProjectReference Include="..\Tic-Tac-Toe.Infrastructure\Tic-Tac-Toe.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
